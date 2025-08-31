@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV != "production"){
+  require('dotenv').config();
+}
+
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -13,6 +17,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const userRoutes = require("./routes/user.js");
+
 
 // Connect to MongoDB
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
