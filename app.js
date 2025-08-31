@@ -1,5 +1,5 @@
-if(process.env.NODE_ENV != "production"){
-  require('dotenv').config();
+if (process.env.NODE_ENV != "production") {
+  require("dotenv").config();
 }
 
 const express = require("express");
@@ -12,19 +12,22 @@ const ExpressError = require("./utils/ExpressError.js");
 const listingRoutes = require("./routes/listing.js");
 const reviewRoutes = require("./routes/review.js");
 const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const User = require("./models/user.js");
 const userRoutes = require("./routes/user.js");
 
-
 // Connect to MongoDB
-const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-main().then(() => console.log("Successfully Connected to DB")).catch(console.log);
+
+const dbUrl = process.env.CONNECTION_STRING;
+main()
+  .then(() => console.log("Successfully Connected to DB"))
+  .catch(console.log);
 
 async function main() {
-  await mongoose.connect(MONGO_URL);
+  await mongoose.connect(dbUrl);
 }
 
 // View engine & static files
@@ -38,9 +41,22 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
 
+// Mongostore configuration
+const store = MongoStore.create({
+  mongoUrl: dbUrl,
+  crypto: {
+    secret: process.env.SECRET,
+  },
+  touchAfter: 24 * 3600,
+});
+
+store.on("error", () => {
+  console.log("ERROR in MONGO SESSION STORE", err);
+});
 // Session configuration
 const sessionOptions = {
-  secret: "mysupersecretcode",
+  store,
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -49,15 +65,16 @@ const sessionOptions = {
     httpOnly: true, // Protect against XSS
   },
 };
+
 app.use(session(sessionOptions));
-app.use(flash()); 
+app.use(flash());
 
 // Passport.js authentication setup
 app.use(passport.initialize());
-app.use(passport.session()); 
+app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser()); 
-passport.deserializeUser(User.deserializeUser()); 
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Make flash messages available in all templates
 app.use((req, res, next) => {

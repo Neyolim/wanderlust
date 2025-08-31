@@ -1,14 +1,40 @@
-<footer>
-  <div class="f-info">
-    <div class="f-info-socials">
-      <i class="fa-brands fa-square-facebook"></i>
-      <i class="fa-brands fa-square-instagram"></i>
-      <i class="fa-brands fa-square-linkedin"></i>
+
+<footer class="py-3 border-top">
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+    <!-- Brand + copyright -->
+    <div class="d-flex align-items-center mb-2 mb-md-0">
+      <a href="/listings" class="me-2 brand-link" aria-label="WanderLust home">
+        <i class="fa-solid fa-earth-europe" style="font-size:0.92rem;"></i>
+      </a>
+      <small class="text-muted">&copy; <span id="year"></span> WanderLust</small>
     </div>
-    <div class="f-info-brand">&copy;WanderLust Private Limited</div>
-    <div class="f-info-links">
-      <a href="/privacy">Privacy</a>
-      <a href="/terms">Terms</a>
+
+    <!-- Links -->
+    <div class="text-center">
+      <a href="/privacy" class="me-3 footer-link">Privacy</a>
+      <a href="/terms" class="me-3 footer-link">Terms</a>
+      <a href="/contact" class="footer-link">Contact</a>
+    </div>
+
+    <!-- Socials -->
+    <div class="mt-2 mt-md-0">
+      <a href="#" class="me-2 social-link" aria-label="Facebook"><i class="fa-brands fa-square-facebook"></i></a>
+      <a href="#" class="me-2 social-link" aria-label="Instagram"><i class="fa-brands fa-square-instagram"></i></a>
+      <a href="#" class="social-link" aria-label="LinkedIn"><i class="fa-brands fa-square-linkedin"></i></a>
     </div>
   </div>
 </footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+
+<style>
+  :root { --brand: #FF5A5F; }
+
+  .brand-link { color: var(--brand); font-weight: 600; font-size: 1rem; text-decoration: none; }
+  .footer-link { color: #6c757d; text-decoration: none; font-size: 0.95rem; }
+  .footer-link:hover { color: var(--brand); text-decoration: underline; }
+  .social-link { color: #6c757d; font-size: 1.05rem; text-decoration: none; }
+  .social-link:hover { color: var(--brand); transform: translateY(-2px); }
+</style>
